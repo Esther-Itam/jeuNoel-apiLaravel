@@ -11,6 +11,7 @@ use App\Http\Controllers\QuizController;
 use App\Http\Controllers\QuestionController;
 use App\Http\Controllers\AnswerController;
 use App\Http\Controllers\TeamAnswersController;
+use App\Http\Controllers\ResultController;
 
 use App\Models\Teams;
 
@@ -30,12 +31,16 @@ Route::post('/register', [AuthenticationController::class, 'register']);
 Route::post('/login', [AuthenticationController::class, 'login']);
 Route::get('/index', [AuthenticationController::class, 'index']);
 Route::get('/show/{id}', [AuthenticationController::class, 'show'])->middleware('App\Http\Middleware\React');
+Route::put('update/{id}', [AuthenticationController::class, 'update']);
 
 Route::post('/teamBuilding', [TeamController::class, 'registerTeam'])->middleware('App\Http\Middleware\React');
 Route::get('/teamPresentation', [TeamController::class, 'presentationTeam']);
+Route::get('/teamShow/{id}', [TeamController::class, 'teamShow']);
+Route::delete('/teamDelete', [TeamController::class, 'delete']);
 
 Route::get('/color', [ColorController::class, 'index']);
 Route::put('color/{id}', [ColorController::class, 'update']);
+Route::put('color', [ColorController::class, 'updateUsed']);
 Route::get('/color/{id}', [ColorController::class, 'show']);
 Route::post('/color', [ColorController::class, 'create']);
 
@@ -59,13 +64,16 @@ Route::post('/categorie', [CategorieController::class, 'create']);
 Route::get('categorie', [CategorieController::class, 'index']);
 Route::get('categorie/{id}', [CategorieController::class, 'show']);
 Route::get('categorieShow/{id}', [CategorieController::class, 'categorieShow']);
+Route::get('categorieUsed', [CategorieController::class, 'categorieUsed']);
 Route::put('categorie/{id}', [CategorieController::class, 'update']);
+Route::put('categorie', [CategorieController::class, 'updateUsed']);
 Route::delete('categorie/{id}', [CategorieController::class, 'delete']);
 
 Route::post('/team_answers', [TeamAnswersController::class, 'create']);
-Route::get('/team_answers', [TeamAnswersController::class, 'index']);
+Route::get('/team_answers/index', [TeamAnswersController::class, 'index']);
 Route::get('/team_answers', [TeamAnswersController::class, 'show']);
 
+Route::get('/results', [ResultController::class, 'show']);
 
  Route::get('/env', function(){
     return response()->json([

@@ -23,7 +23,7 @@ class TeamAnswersController extends Controller
 
         $teamAnswers= new Team_answers;
         $teamAnswers->question_id=$request->input('question_id');  
-        $teamAnswers->team_id=15; 
+        $teamAnswers->team_id=$request->input('team_id'); 
         $teamAnswers->answer_id=$request->input('answer_id'); 
         $teamAnswers->save();  
                 

@@ -36,7 +36,15 @@ class ColorController extends Controller
     ]); 
     }
 
+/* **************************UPDATE USED COLOR ********************** */
 
+function updateUsed(){
+    $color=DB::table('colors')->update(['is_used' => 0]);
+    return response()->json([             
+    'message'=> 'mise a jour de la colonne is_used des couleurs reussie',       
+    'data'=> $color       
+]); 
+}
 
 /* **************************SHOW COLOR ********************** */
 

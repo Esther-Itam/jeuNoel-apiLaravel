@@ -38,21 +38,18 @@ class AuthenticationController extends Controller
 
 /* ************************************************UPDATE ************************************************* */
 
-    public function update(Request $request, User $user){
-        $input = $request->all();
-        $validator = Validator::make($input, [
-            'name' => 'required',
-            'email' => 'required',
-            'password' => 'required'
+    public function update(Request $request, $id, RegisterValidation $validation){
+        $validator= Validator::make($request->all(), $validation->rules(), $validation->messages());
 
-            ]);
-            if($validator->fails()){
-            return $validator->errors();       
-            }
-        $user->name = $input['name'];
-        $user->email = $input['email'];
-        $user->password = $input['password'];
-        $user->save();
+        if($validator->fails()){
+            return response()->json(['errors'=>$validator->errors()], 401);
+        }
+        $user =User::findOrFail($id);
+        $user->update([
+            'name' => $request->name,
+            'email' => $request->email,
+            'password' => bcrypt($request->password)
+        ]);
         return response()->json([
         "success" => true,
         "message" => "Account updated successfully.",
@@ -60,14 +57,7 @@ class AuthenticationController extends Controller
         ]);
 
     }
-    public function userInfo() 
-    {
- 
-     $user = auth()->user();
-      
-     return response()->json(['user' => $user], 200);
- 
-    }
+
 /* ************************************************LOGIN ******************************************************* */
     public function login(Request $request, LoginValidation $validation){
         $validator= Validator::make($request->all(), $validation->rules(), $validation->messages());
@@ -96,8 +86,7 @@ class AuthenticationController extends Controller
 /* **************************SHOW User ********************** */
     public function show($id){
 
-        $user = DB::table('users')->select('users.name as userName', 'users.id as userId', 'users.is_admin as userAdmin', 'teams.id as teamId', 'teams.name as teamName', 'teams.color as teamColor')
-        ->join('teams', 'teams.user_id', '=', 'users.id')
+        $user = DB::table('users')->select('users.name as userName', 'users.id as userId', 'users.is_admin as userAdmin', 'users.email as userEmail')
         ->where('users.api_token', '=', $id)
         ->get();
         $row[]=$user;

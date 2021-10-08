@@ -39,6 +39,22 @@ function index(){
    'data'=> $categorie]); 
 
 }
+ /* **************************USED Categories ********************** */
+
+ function categorieUsed(){
+    $categorieUsed=Categories::all();
+    if(!$categorieUsed){
+        return response()->json(['message'=>'ressource not found'], 403);
+    }
+            $categorieUsed = DB::table('categories')->select('categories.name as categorieName', 'categories.is_used as categorieUsed', 'categories.updated_at as categorieUpdate')
+            ->where('categories.is_used', '=', 1)
+            ->orderBy('categories.updated_at')
+            ->get();
+            $row[]=$categorieUsed;
+            return response()->json([    
+                'message'=> 'Catégories affichées',     
+                'data'=> $row]); 
+        }
   /* **************************SHOW Categories ********************** */
 
   function categorieShow($id){
@@ -46,7 +62,7 @@ function index(){
     if(!$categorieShow){
         return response()->json(['message'=>'ressource not found'], 403);
     }
-            $categorieShow = DB::table('categories')->select('categories.name as categorieName', 'categories.id as categorieId')
+            $categorieShow = DB::table('categories')->select('categories.name as categorieName', 'categories.id as categorieId', 'categories.is_used as categorieUsed')
             ->where('categories.id', '=', $id)
             ->get();
             $row[]=$categorieShow;
@@ -121,6 +137,15 @@ function update(Request $request, $id){
 ]); 
 }
 
+/* **************************UPDATE USED COLOR ********************** */
+
+function updateUsed(){
+    $color=DB::table('categories')->update(['is_used' => 0]);
+    return response()->json([             
+    'message'=> 'mise a jour de la colonne is_used des catégories reussie',       
+    'data'=> $color       
+]); 
+}
     /* **************************DELETE Categories ********************** */
 
 function delete(Request $request, $id){
