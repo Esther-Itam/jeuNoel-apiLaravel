@@ -6,6 +6,7 @@ use App\Models\User;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Http\Validation\RegisterValidation;
+use App\Http\Validation\UpdateValidation;
 use App\Http\Validation\LoginValidation;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Auth;
@@ -38,7 +39,7 @@ class AuthenticationController extends Controller
 
 /* ************************************************UPDATE ************************************************* */
 
-    public function update(Request $request, $id, RegisterValidation $validation){
+    public function update(Request $request, $id, UpdateValidation $validation){
         $validator= Validator::make($request->all(), $validation->rules(), $validation->messages());
 
         if($validator->fails()){
@@ -47,7 +48,6 @@ class AuthenticationController extends Controller
         $user =User::findOrFail($id);
         $user->update([
             'name' => $request->name,
-            'email' => $request->email,
             'password' => bcrypt($request->password)
         ]);
         return response()->json([

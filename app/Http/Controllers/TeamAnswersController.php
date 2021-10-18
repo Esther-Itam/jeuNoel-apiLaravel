@@ -51,8 +51,8 @@ class TeamAnswersController extends Controller
             ->join('answers', 'answers.id', '=', 'team_answers.answer_id')
             ->where('answers.is_valid', '=', 1)
             ->whereNotNull('team_answers.id')
-            ->whereTime('team_answers.created_at', '<', Carbon::now()->subMinutes(5)->toDateTimeString())
-            ->select('questions.name as questionName', 'answers.name as answerName', 'answers.id as answerId', 'team_answers.answer_id as team_answersId')
+            ->whereTime('team_answers.created_at', '<', Carbon::now()->subMinutes(3)->toDateTimeString())
+            ->select('questions.name as questionName', 'answers.name as answerName', 'answers.id as answerId', 'team_answers.answer_id as team_answerId')
             ->get();
 
     return response()->json([    
