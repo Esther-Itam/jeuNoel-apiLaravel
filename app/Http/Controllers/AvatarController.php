@@ -1,21 +1,22 @@
-<?php
+<?php namespace App\Http\Controllers;
 
-namespace App\Http\Controllers;
-
-use Illuminate\Support\Str;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Validator;
-use App\Models\Avatars;
+use App\Interfaces\AvatarRepositoryInterface; 
 
 
 class AvatarController extends Controller
 {
+    
+    protected $avatarInterface;
 
-    public function displayAvatar(){
-        $avatars=Avatars::all();
-        return response()->json($avatars);
+    public function __construct(AvatarRepositoryInterface $avatarInterface)
+    {
+        $this->avatarInterface = $avatarInterface;
     }
 
-
+    /* **************************INDEX COLOR ********************** */
+    public function index()
+    {
+        return $this->avatarInterface->index();
+    }
    
 }

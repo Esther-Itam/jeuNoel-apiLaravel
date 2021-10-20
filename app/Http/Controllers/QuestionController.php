@@ -1,58 +1,33 @@
-<?php
+<?php namespace App\Http\Controllers;
 
-namespace App\Http\Controllers;
-
-use Illuminate\Support\Str;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Validator;
-use Illuminate\Support\Facades\DB;
-
-use App\Models\Quiz;
-use App\Models\Questions;
-use App\Models\Categories;
-use App\Models\Answers;
-
+use App\Interfaces\QuestionRepositoryInterface; 
 
 class QuestionController extends Controller
 {
-    /* ************************************************************* */
-    /* ************************** CRUD ***************************** */
-    /* ************************************************************* */
 
-    /* **************************CREATE Question ********************** */
-    function create(Request $request){
-        $id = DB::table('quizzes')->orderBy('id', 'DESC')->value('id');
+    protected $questionInterface;
 
-        $question= new Questions;
-        $question->name = $request->input('question'); 
-        $question->quiz_id=$id; 
-        $question->save();  
-                
-        return response()->json([         
-              "message" => "creation du question reussi",         
-               "data"=> $question        
-          ], 201);  
-    }
-
-    /* **************************SHOW Question ********************** */
-
-    function index(){
-        $question = Questions::all();   
-        return response()->json([    
-       'message'=> 'Questions affichées',     
-       'data'=> $question]);  
+    public function __construct(QuestionRepositoryInterface $questionInterface)
+    {
+        $this->questionInterface = $questionInterface;
     }
     
-
-    /* **************************UPDATE Question ********************** */
-
-    function update(Request $request, $id){
-        $question = Questions::findOrFail($id);
-        $question->update($request->all());
-          return response([             
-          'message'=> 'mise a jour de la question reussie',       
-           'data'=> $question       
-    ]); 
+    /* **************************SHOW Answer ********************** */
+    public function index()
+    {
+        return $this->questionInterface->index();
     }
-   
+  
+    /* **************************STORE Answer ********************** */
+    public function store(Request $request)
+    {
+      return $this->questionInterface->store($request); 
+    }
+  
+    /* **************************UPDATE Answer ********************** */
+    public function update(Request $request, $id)
+    {
+      return $this->questionInterface->update($request, $id);
+    }
 }

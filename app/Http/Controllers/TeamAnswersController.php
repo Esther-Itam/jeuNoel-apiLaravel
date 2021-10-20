@@ -1,62 +1,46 @@
-<?php
+<?php namespace App\Http\Controllers;
 
-namespace App\Http\Controllers;
-
-use Illuminate\Support\Str;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Validator;
-use App\Models\Team_answers;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Arr;
-use Carbon\Carbon;
+use App\Interfaces\TeamAnswerRepositoryInterface; 
 
 class TeamAnswersController extends Controller
 {
+  
+  protected $teamAnswerInterface;
 
+  public function __construct(TeamAnswerRepositoryInterface $teamAnswerInterface)
+  {
+      $this->teamAnswerInterface = $teamAnswerInterface;
+  }
 
-  /* ************************************************************* */
-    /* ************************** CRUD ***************************** */
-    /* ************************************************************* */
-
-    /* **************************CREATE TEAM ANSWERS ********************** */
-    function create(Request $request){
-
-        $teamAnswers= new Team_answers;
-        $teamAnswers->question_id=$request->input('question_id');  
-        $teamAnswers->team_id=$request->input('team_id'); 
-        $teamAnswers->answer_id=$request->input('answer_id'); 
-        $teamAnswers->save();  
-                
-        return response()->json([         
-              "message" => "Réponse envoyée",         
-               "data"=> $teamAnswers        
-          ], 201);  
-    }
   /* **************************INDEX TEAM ANSWERS ********************** */
-
-  function index(){
-    $teamAnswers = Team_answers::all();   
-    return response()->json([    
-   'message'=> 'Réponses validées',     
-   'data'=> $teamAnswers]);  
-}
+  public function index()
+  {
+    return $this->teamAnswerInterface->index();
+  }
 
    /* **************************SHOW TEAM ANSWERS ********************** */
+  public function show()
+  { 
+    return $this->teamAnswerInterface->show();
+  }
+    
+ /* **************************SHOW ANSWERS ********************** */
+  public function showAnswers()
+  { 
+    return $this->teamAnswerInterface->showAnswers();
+  }
 
-   function show(){
-   
+  /* **************************CREATE TEAM ANSWERS ********************** */
+  public function store(Request $request)
+  {
+    return $this->teamAnswerInterface->store($request);
+  }
 
-            $data = DB::table('team_answers')
-            ->join('questions', 'questions.id', '=', 'team_answers.question_id')
-            ->join('answers', 'answers.id', '=', 'team_answers.answer_id')
-            ->where('answers.is_valid', '=', 1)
-            ->whereNotNull('team_answers.id')
-            ->whereTime('team_answers.created_at', '<', Carbon::now()->subMinutes(3)->toDateTimeString())
-            ->select('questions.name as questionName', 'answers.name as answerName', 'answers.id as answerId', 'team_answers.answer_id as team_answerId')
-            ->get();
+  /* **************************DELETE Teams ********************** */
+  public function delete()
+  {
+      return $this->teamAnswerInterface->delete();
+  }
 
-    return response()->json([    
-        'message'=> 'Réponses validées affichées',     
-        'data'=> $data]);
-}
 }
