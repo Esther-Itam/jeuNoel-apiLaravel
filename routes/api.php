@@ -12,6 +12,7 @@ use App\Http\Controllers\QuestionController;
 use App\Http\Controllers\AnswerController;
 use App\Http\Controllers\TeamAnswersController;
 use App\Http\Controllers\ResultController;
+use App\Http\Controllers\MailController;
 
 use App\Models\Teams;
 
@@ -74,10 +75,9 @@ Route::get('/team_answers', [TeamAnswersController::class, 'show']);
 Route::get('/team_showAnswers', [TeamAnswersController::class, 'showAnswers']);
 Route::delete('/teamAnswersDelete', [TeamAnswersController::class, 'delete']);
 
-
 Route::get('/results', [ResultController::class, 'index']);
 
- Route::get('/env', function(){
+Route::get('/env', function(){
     return response()->json([
         'connection'=>env('DB_CONNECTION'),
         'host'=>env('DB_HOST'),

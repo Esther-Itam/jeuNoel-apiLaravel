@@ -11,7 +11,7 @@ use App\Http\Validation\LoginValidation;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
-
+use App\Events\NewUserRegistered;
 
 class UserRepository implements UserRepositoryInterface
 {
@@ -27,18 +27,21 @@ class UserRepository implements UserRepositoryInterface
         if($validator->fails()){
             return response()->json(['errors'=>$validator->errors()], 401);
         }
-        try{
+     
             $user = new User;
             $user->name = $request->input('name');
             $user->email = $request->input('email'); 
             $user->password = bcrypt($request->input('password')); 
             $user->api_token = Str::random(60); 
             $user->is_admin = 0;  
-            $user->save();  
-            return $this->success("creation de l'utilisateur reussi", $user);
-        } catch(\Exception $e) {
-            return $this->error($e->getMessage(), $e->getCode());
-        }        
+            $user->save(); 
+            event(new NewUserRegistered($user)); 
+            return response()->json([
+                'message' => 'creation de l\'utilisateur reussi',
+                'error' => false,
+                'data' => $user
+            ]);
+             
     }
 
     /* ************************************************UPDATE ************************************************* */
