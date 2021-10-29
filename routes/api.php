@@ -13,7 +13,7 @@ use App\Http\Controllers\AnswerController;
 use App\Http\Controllers\TeamAnswersController;
 use App\Http\Controllers\ResultController;
 use App\Http\Controllers\MailController;
-
+use App\Events\Websockets;
 use App\Models\Teams;
 
 
@@ -87,3 +87,10 @@ Route::get('/env', function(){
         'password'=>env('DB_PASSWORD')
     ]);
 }); 
+
+Broadcast::channel('my-channel', function () {
+    return "toto";
+});
+Route::get('/broadcast', function(){
+    broadcast(new Websockets());
+});

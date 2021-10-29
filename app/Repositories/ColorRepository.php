@@ -5,6 +5,8 @@ use App\Interfaces\ColorRepositoryInterface;
 use App\Traits\ResponseAPI;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use App\Events\Websockets;
+use App\Events\MyEvent;
 
 class ColorRepository implements ColorRepositoryInterface
 {
@@ -19,7 +21,8 @@ class ColorRepository implements ColorRepositoryInterface
             $color = Colors::all();
             $color = DB::table('colors')->select('colors.color as colorName', 'colors.id as colorId', 'colors.is_used as colorUsed')
             ->get();
-            $row[]=$color; 
+            $row[]=$color;
+            event(new MyEvent('hello world'));  
             return $this->success("Couleurs affichées", $row);
         } catch(\Exception $e) {
             return $this->error($e->getMessage(), $e->getCode());
@@ -32,6 +35,7 @@ class ColorRepository implements ColorRepositoryInterface
         try{
             $color = Colors::findOrFail($id);
             $color->update($request->all());
+            event(new MyEvent('hello world')); 
             return $this->success("mise a jour de la couleur reussie", $color);
         } catch(\Exception $e) {
             return $this->error($e->getMessage(), $e->getCode());
@@ -60,6 +64,7 @@ class ColorRepository implements ColorRepositoryInterface
             ->get();
 
             $row[]=$color;
+            event(new MyEvent('hello world')); 
             return $this->success("couleurs affichées", $row);
         } catch(\Exception $e) {
             return $this->error($e->getMessage(), $e->getCode());

@@ -46,5 +46,24 @@
         <p>http://localhost:3000/</p>   
             </div>
         </div>
+
+        <script>
+            window.Pusher = require('pusher-js');
+
+window.Echo = new Echo({
+    broadcaster: 'pusher',
+    wsHost: window.location.hostname,
+    wsPort: 6001,
+    wssHost: window.location.hostname,
+    wssPort: 6001,
+    key: 'client',
+    disableStats: true,
+    enabledTransports: ['ws', 'wss'],
+    forceTLS: false,
+  });
+        window.Echo.channel('my-channel')listen('.my-event', function(data) {
+      console.log(data, 'ça fonctionne');
+    });
+      </script>
     </body>
 </html>

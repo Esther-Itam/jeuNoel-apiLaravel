@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\GoogleController;
+use App\events\Websockets;
 
 /*
 |--------------------------------------------------------------------------
@@ -16,3 +17,6 @@ use App\Http\Controllers\GoogleController;
 
 Route::get('/auth/redirect/{provider}', [GoogleController::class, 'redirect']);
 Route::get('/callback/{provider}', [GoogleController::class, 'callback']);
+Route::get('/broadcast', function(){
+    broadcast(new Websockets());
+});

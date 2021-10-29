@@ -67,6 +67,8 @@ class TeamAnswerRepository implements TeamAnswerRepositoryInterface
             ->whereNotNull('team_answers.id')
             ->whereTime('team_answers.created_at', '<', Carbon::now()->subMinutes(3)->toDateTimeString())
             ->select('questions.name as questionName', 'answers.name as answerName', 'answers.id as answerId', 'team_answers.answer_id as team_answerId')
+            ->orderBy('team_answers.created_at', 'DESC')
+            ->limit(10)
             ->get();
             return $this->success("Réponses validées affichées", $data);
         }catch(\Exception $e) {

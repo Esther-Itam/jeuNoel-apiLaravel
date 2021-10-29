@@ -83,7 +83,7 @@ class CategorieRepository implements CategorieRepositoryInterface
             if(!$categorie){
                 return response()->json(['message'=>'ressource not found'], 403);
             }
-            $categorie = DB::table('categories')->select('categories.name as categorieName', 'categories.id as categorieId')
+            $categorie = DB::table('categories')->select('categories.name as categorieName', 'categories.id as categorieId', 'categories.is_used as categorieUsed')
             ->where('categories.id', '=', $id)
             ->get();
             $row1[]=$categorie;

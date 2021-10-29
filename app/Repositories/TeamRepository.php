@@ -10,6 +10,7 @@ use App\Models\Teams;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Colors;
 use Illuminate\Support\Facades\DB;
+use App\Events\MyEvent;
 
 class TeamRepository implements TeamRepositoryInterface
 {
@@ -22,6 +23,7 @@ class TeamRepository implements TeamRepositoryInterface
         try{
             $teams=Teams::all();
             return $this->success("Equipes affichées", $teams);
+
         }catch(\Exception $e) {
             return $this->error($e->getMessage(), $e->getCode());
         }  

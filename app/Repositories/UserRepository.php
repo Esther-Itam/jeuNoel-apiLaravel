@@ -35,7 +35,7 @@ class UserRepository implements UserRepositoryInterface
             $user->api_token = Str::random(60); 
             $user->is_admin = 0;  
             $user->save(); 
-            event(new NewUserRegistered($user)); 
+            event(new NewUserRegistered($user));
             return response()->json([
                 'message' => 'creation de l\'utilisateur reussi',
                 'error' => false,
