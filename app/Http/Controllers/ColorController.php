@@ -19,7 +19,7 @@ class ColorController extends Controller
     {
         return $this->colorInterface->index();
     }
-       
+     
     /* **************************UPDATE COLOR ********************** */
     public function update(Request $request, $id)
     {

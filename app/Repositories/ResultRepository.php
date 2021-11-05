@@ -5,7 +5,7 @@ use App\Traits\ResponseAPI;
 use Illuminate\Http\Request;
 use App\Models\Team_answers;
 use Illuminate\Support\Facades\DB;
-
+use App\Events\ResultEvent;
 
 class ResultRepository implements ResultRepositoryInterface
 {
@@ -26,6 +26,7 @@ class ResultRepository implements ResultRepositoryInterface
             ->orderByDesc('userCount')
             ->get();
             $data[]=$team_answers;
+            event(new ResultEvent($team_answers));
             return $this->success("bilan affiché", $data);
         }catch(\Exception $e) {
             return $this->error($e->getMessage(), $e->getCode());

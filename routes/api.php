@@ -87,10 +87,3 @@ Route::get('/env', function(){
         'password'=>env('DB_PASSWORD')
     ]);
 }); 
-
-Broadcast::channel('my-channel', function () {
-    return "toto";
-});
-Route::get('/broadcast', function(){
-    broadcast(new Websockets());
-});

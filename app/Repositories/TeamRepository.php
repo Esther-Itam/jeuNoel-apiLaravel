@@ -11,6 +11,8 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\Colors;
 use Illuminate\Support\Facades\DB;
 use App\Events\MyEvent;
+use App\Events\StatusLiked;
+use App\Events\TeamEvent;
 
 class TeamRepository implements TeamRepositoryInterface
 {
@@ -20,13 +22,15 @@ class TeamRepository implements TeamRepositoryInterface
     /* **************************INDEX COLOR ********************** */
     public function index()
     {
-        try{
-            $teams=Teams::all();
-            return $this->success("Equipes affichées", $teams);
 
-        }catch(\Exception $e) {
-            return $this->error($e->getMessage(), $e->getCode());
-        }  
+            $teams=Teams::all();
+            event(new TeamEvent($teams));
+            return response()->json([
+                'message' => 'Equipes affichées',
+                'error' => false,
+                'data' => $teams
+            ]);
+
     }
 
     /* **************************SHOW Teams ********************** */

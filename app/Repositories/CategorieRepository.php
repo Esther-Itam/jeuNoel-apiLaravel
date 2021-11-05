@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Models\Categories;
 use Illuminate\Support\Arr;
+use App\Events\CategorieEvent;
 
 class CategorieRepository implements CategorieRepositoryInterface
 {
@@ -69,6 +70,7 @@ class CategorieRepository implements CategorieRepositoryInterface
             ->where('categories.id', '=', $id)
             ->get();
             $row[]=$categorieShow;
+            event(new CategorieEvent($categorieShow));
             return $this->success("Catégories affichées", $row);
         } catch(\Exception $e) {
             return $this->error($e->getMessage(), $e->getCode());
