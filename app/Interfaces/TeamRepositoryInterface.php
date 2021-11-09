@@ -10,5 +10,7 @@ interface TeamRepositoryInterface{
     public function show($id);
     public function store(Request $request, TeamValidation $validation, Colors $color);
     public function delete();
+    public function showRandom();
+
 }
 	

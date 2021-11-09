@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\DB;
 use App\Events\MyEvent;
 use App\Events\StatusLiked;
 use App\Events\TeamEvent;
+use App\Events\RandomEvent;
 
 class TeamRepository implements TeamRepositoryInterface
 {
@@ -87,4 +88,21 @@ class TeamRepository implements TeamRepositoryInterface
             return $this->error($e->getMessage(), $e->getCode());
         }
     } 
+
+      /* *******************************RANDOM COLOR ************************ */
+    public function showRandom(){
+        try{
+            $random=DB::table('teams')
+            ->select('color')
+            ->pluck('color')
+            ->random(1);
+            [$random_color]=$random;
+            event(new RandomEvent($random_color));
+            return $this->success("random color", $random_color);
+        }catch(\Exception $e) {
+            return $this->error($e->getMessage(), $e->getCode());
+        }
+    }
+
+
 }

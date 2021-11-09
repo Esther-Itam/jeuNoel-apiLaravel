@@ -39,4 +39,10 @@ class TeamController extends Controller
         return $this->teamInterface->delete();
     }
 
+    /* **************************RANDOM Teams ********************** */
+    public function showRandom()
+    {
+        return $this->teamInterface->showRandom();
+
+    }
 }

@@ -38,6 +38,7 @@ Route::post('/teamBuilding', [TeamController::class, 'store'])->middleware('App\
 Route::get('/teamPresentation', [TeamController::class, 'index']);
 Route::get('/teamShow/{id}', [TeamController::class, 'show']);
 Route::delete('/teamDelete', [TeamController::class, 'delete']);
+Route::get('/random', [TeamController::class, 'showRandom']);
 
 Route::get('/color', [ColorController::class, 'index']);
 Route::put('color/{id}', [ColorController::class, 'update']);

@@ -80,7 +80,7 @@ class CategorieRepository implements CategorieRepositoryInterface
     /* **************************SHOW Categories ********************** */
     public function show($id)
     {
-        try{
+ 
             $categorie=Categories::find($id);
             if(!$categorie){
                 return response()->json(['message'=>'ressource not found'], 403);
@@ -103,14 +103,21 @@ class CategorieRepository implements CategorieRepositoryInterface
             ->get();
 
             $row2[]=$quiz;
+
+            $teams_id=DB::table('teams')
+            ->groupBy('id')
+            ->pluck('id');
+          
+     
             $question_answer_id=DB::table('team_answers')
-            ->pluck('question_id');
-           
+                ->pluck('question_id');
+        
             $question_id=DB::table('questions')
             ->where('quiz_id', '=', $quiz_id_random)
             ->whereNotIn('questions.id', $question_answer_id)
-            ->pluck('id')
+            ->pluck('questions.id')
             ->random(1);
+       
             [$question_id_random]=$question_id;
 
             $questions = DB::table('questions')->select('questions.name as questionName', 'questions.id as questionId')
@@ -127,14 +134,15 @@ class CategorieRepository implements CategorieRepositoryInterface
                                             ->get();
         
             $row4[]=$answers;
+     
+
             $data=Arr::crossJoin($row1, $row2, $row3, $row4);
+            
             return response()->json([
                 'message' => "Catégories affichées",
                 'data' => $data
             ]);
-        } catch(\Exception $e) {
-            return $this->error($e->getMessage(), $e->getCode());
-        }  
+     
     }
 
     /* **************************UPDATE Categories ********************** */

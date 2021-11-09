@@ -71,4 +71,6 @@ class ColorRepository implements ColorRepositoryInterface
             return $this->error($e->getMessage(), $e->getCode());
         } 
     }
-}    
+      
+  
+} 
