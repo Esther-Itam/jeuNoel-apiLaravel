@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\DB;
 use App\Models\Categories;
 use Illuminate\Support\Arr;
 use App\Events\CategorieEvent;
+use App\Events\QuizEvent;
 
 class CategorieRepository implements CategorieRepositoryInterface
 {
@@ -137,7 +138,7 @@ class CategorieRepository implements CategorieRepositoryInterface
      
 
             $data=Arr::crossJoin($row1, $row2, $row3, $row4);
-            
+            event(new QuizEvent($data));
             return response()->json([
                 'message' => "Catégories affichées",
                 'data' => $data
