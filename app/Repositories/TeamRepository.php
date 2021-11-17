@@ -38,7 +38,7 @@ class TeamRepository implements TeamRepositoryInterface
     public function show($id)
     {
         try{
-            $user = DB::table('users')->select('users.name as userName', 'users.id as userId', 'users.is_admin as userAdmin', 'teams.id as teamId', 'teams.name as teamName', 'teams.color as teamColor')
+            $user = DB::table('users')->select('users.name as userName', 'users.id as userId', 'users.is_admin as userAdmin', 'teams.id as teamId', 'teams.name as teamName', 'teams.color as teamColor', 'teams.avatar as teamAvatar')
             ->join('teams', 'teams.user_id', '=', 'users.id')
             ->where('users.api_token', '=', $id)
             ->get();
